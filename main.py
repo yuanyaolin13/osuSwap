@@ -2,34 +2,42 @@ import glob
 import os
 import shutil
 
-### THINGS TO BE REPLACED:
-
-## IMAGES
-# pause-overlay
-# menu-background
-# fail-background
-# play-skip-*
-# menu-back-*
-# mode-*, i.e. fruits, mania, osu, taiko
-# ranking-*, i.e. a, b, c, d, panel, etc.
-# section-*, i.e. fail & pass
-# selection-mod-*, i.e. cinema, autoplay, doubletime, etc.
-# selection-*, i.e. options, random, tab, etc
-
-## AUDIO -> to be added
-# combobreak
-# sectionfail, sectionpass
-
-
-# CHANGE TO WHATEVER IT IS CALLED
+# THESE ARE TO BE USER CHANGED.
 NON_ANIME = "skins/CHANGEME"
 ANIME = "skins/CHANGEME"
+
+
+PATTERNS = [
+    "menu-back-*.png",
+    "ranking-*.png",
+    "mode-*.png",
+    "section-*.png",
+    "selection-mod-*.png",
+    "selection-*.png",
+    "play-skip-*.png",
+]
+NON_PATTERNS = [
+    "pause-overlay.png",
+    "menu-background.png",
+    "menu-background.jpg",
+    "fail-background.png",
+    "fail-background.jpg",
+    "background.png",
+    "background.jpg",
+]
+AUDIO_FILES = [
+    "combobreak.wav",
+    "sectionfail.wav",
+    "sectionpass.wav",
+    "failsound.wav",
+]
 
 def start(source_folder):
     copy(source_folder);
     replace(NON_ANIME, f"{ANIME}_copy")
+    output()
 
-# will create new folder
+# Create copy of the "ANIME" folder
 def copy(source_folder):
 
     parent_dir = os.path.dirname(source_folder)
@@ -52,7 +60,7 @@ def replace(source_folder, destination_folder):
         raise FileNotFoundError(f"Destination folder does not exist: {destination_folder}")
 
     # Does unique files first
-    for filename in uniqueFiles:
+    for filename in NON_PATTERNS:
         animeFileToReplace = os.path.join(source_folder, filename)
         nonAnimeFile = os.path.join(destination_folder, filename)
 
@@ -63,7 +71,7 @@ def replace(source_folder, destination_folder):
             print(f"Skipped '{filename}' (missing in source or destination)")
 
     # Replace sounds next
-    for audio in audioFiles:
+    for audio in AUDIO_FILES:
         animeFileToDelete = os.path.join(destination_folder, audio)
         if os.path.exists(animeFileToDelete):
             print(animeFileToDelete)
@@ -75,14 +83,14 @@ def replace(source_folder, destination_folder):
     # Next, moves on to the patterns, removes them first in destination, and then all of them are
     # replaced by the source folder
     # Remove files
-    for pattern in patternFiles:
+    for pattern in PATTERNS:
         for file_path in glob.glob(os.path.join(destination_folder, pattern)):
             if os.path.isfile(file_path):
                 os.remove(file_path)
                 print(f"Removed: {file_path}")
 
     # Copies from the source
-    for pattern in patternFiles:
+    for pattern in PATTERNS:
         # Find matching files in the source folder
         for src_path in glob.glob(os.path.join(source_folder, pattern)):
             if os.path.isfile(src_path):
@@ -92,34 +100,9 @@ def replace(source_folder, destination_folder):
 
     print("DONE COPYING")
 
+def output():
     shutil.make_archive(f"{ANIME}_copy", 'zip', f"{ANIME}_copy")
     os.rename(f"{ANIME}_copy.zip", f"{ANIME}_copy.osk")
-
-
-patternFiles = [
-    "menu-back-*.png",
-    "ranking-*.png",
-    "mode-*.png",
-    "section-*.png",
-    "selection-mod-*.png",
-    "selection-*.png",
-    "play-skip-*.png",
-]
-uniqueFiles = [
-    "pause-overlay.png",
-    "menu-background.png",
-    "menu-background.jpg",
-    "fail-background.png",
-    "fail-background.jpg",
-    "background.png",
-    "background.jpg",
-]
-audioFiles = [
-    "combobreak.wav",
-    "sectionfail.wav",
-    "sectionpass.wav",
-    "failsound.wav",
-]
 
 # First copies, then replaces
 start(ANIME)
