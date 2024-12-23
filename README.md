@@ -8,3 +8,7 @@ Simple steps to utilize this app!
   <li>Run the program and retrieve the .osk file from the skins directory!</li>
 </ol>
 OPTIONAL: if you want to run the helperDelete.py, you must change the file_path and osk_path!!
+
+side note: there may be some issues with animations and you will need to change the skin.ini for it! The skin.ini is taken from the original "ANIME" skin.
+
+UI additions coming soon!
