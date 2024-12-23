@@ -20,8 +20,10 @@ import shutil
 # combobreak
 # sectionfail, sectionpass
 
-NON_ANIME = "skins/yugen"
-ANIME = "skins/anime"
+
+# CHANGE TO WHATEVER IT IS CALLED
+NON_ANIME = "skins/CHANGEME"
+ANIME = "skins/CHANGEME"
 
 def start(source_folder):
     copy(source_folder);
